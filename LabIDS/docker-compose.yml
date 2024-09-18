@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+  suricata:
+    build: ./suricata
+    container_name: router_suricata
+    privileged: true
+    cap_add:
+      - NET_ADMIN  # Necessario per gestire le interfacce di rete
+    networks:
+      web_net:
+        ipv4_address: 172.18.0.2
+      attack_net:
+        ipv4_address: 172.19.0.2
+    environment:
+      - INTERFACES=eth0 eth1  
+    ports:
+      - "8000:8000"  # Esempio, se vuoi accedere ai log o statistiche via web
+#    volumes:
+#      - ./suricata/config:/etc/suricata
+#      - ./suricata/logs:/var/log/suricata
+  
+  webserver:
+    build: ./webserver
+    container_name: webserver
+    privileged: true
+    networks:
+      web_net:
+        ipv4_address: 172.18.0.3
+    depends_on:
+      - suricata
+    ports:
+      - "8080:80"
+    cap_add:
+    - NET_ADMIN 
+
+  attacker:
+    image: dockersecplayground/kali
+    stdin_open: true   #container_name: attacker
+    networks:
+      attack_net:
+        ipv4_address: 172.19.0.3
+    cap_add:
+      - NET_ADMIN
+    tty: true  # Mantiene il container aperto per interazioni manuali
+    depends_on:
+      - suricata
+
+networks:
+  web_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+  attack_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16

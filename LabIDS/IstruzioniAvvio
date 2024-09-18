@@ -1,8 +1,3 @@
-# SuricataLab
- Laboratorio basato su Docker-compose per fare pratica con alcune tipologie di attacco e sulla identificazione dei suddetti attraverso l'utilizzo di IDS Suricata-based per poter identificare gli attacchi e agire di conseguenza per salvaguardare il webserver di interesse.
-
-
-## Avvio dei containers
 Per l'avvio dei container del laboratorio si esegue 
 
 docker-compose up --build
@@ -48,16 +43,13 @@ suricata -c /etc/suricata/suricata.yaml -i eth0 -i eth1
 che specifica in particolare che il traffico da tenere d'occhio passa 
 attraverso le interfacce eth0 ed eth1.
 
-## Attacchi in esame
-
 Il laboratorio consiste nell'eseguire degli attacchi di diverso tipo sul 
 webserver e riuscire a riconfigurare Suricata in modo da 
 identificare e magari reagire ad una serie di tipologie di attacco quali 
 
 1) lo scanning attraverso nmap, con i comandi 
 
-nmap -sS 172.18.0.3  
-nmap -sV 172.18.0.3
+nmap -sS 172.18.0.3  ,   nmap -sV 172.18.0.3
 
 
 2) XSS sfruttando la pagina http://172.18.0.3/xssVuln.php o 
@@ -75,7 +67,7 @@ quale fermarsi, il rate è il numero di pacchetti inviati al secondo, e
 ovviamente sono specificati IP destinazione, porta e tipo di connessione.
 
 
-## Lettura dei log di Suricata
+
 
 Per controllare che i log siano quelli delle regole che vogliamo 
 (ossia che l'IDS Suricata si comporti come previsto) usiamo i soliti 

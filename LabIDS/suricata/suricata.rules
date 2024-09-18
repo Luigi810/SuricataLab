@@ -1,0 +1,30 @@
+# Example Suricata rules file
+
+# Rule to detect HTTP traffic
+#alert tcp any any -> any 80 (msg:"HTTP traffic detected"; sid:1000001;)
+
+# Rule to detect any TCP traffic
+#alert tcp any any -> any any (msg:"TCP traffic detected"; sid:1000002;)
+
+
+
+#Regola base per rilevare una scansione SYN di Nmap 
+alert tcp any any -> $HOME_NET any (msg:"Nmap SYN scan detected"; flags:S; threshold: type both, track by_src, count 20, seconds 3; classtype:attempted-recon; sid:100001; rev:1;)
+
+
+
+#Regola per rilevare uno scan TCP Connect
+alert tcp any any -> $HOME_NET any (msg:"Nmap TCP Connect scan detected"; flags:S,A; threshold: type both, track by_src, count 20, seconds 3; classtype:attempted-recon; sid:100002; rev:1;)
+
+
+# Rule to detect TCP SYN scan (Nmap)  (attacco Scan)
+alert tcp any any -> $HOME_NET any (msg:"ET SCAN Nmap TCP Syn Scan"; flags:S; threshold: type both, track by_src, count 5, seconds 60; reference:url,doc.emergingthreats.net/bin/view/Main/2000011; classtype:attempted-recon; sid:2000011; rev:13;)
+
+#Rilevazione di XSS con pattern JavaScript generico
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"XSS Attempt Detected"; content:"<script"; http_client_body; nocase; content:"javascript:"; http_uri; nocase; pcre:"/alert\s*\(/i"; metadata:service http; reference:url,www.owasp.org/index.php/Cross-site_scripting; sid:1000001; rev:1;)
+
+#Rilevazione di uno script JavaScript malevolo   (attacco XSS)
+alert http any any -> $HOME_NET any (msg:"XSS Attack Detected: Basic script tag"; flow:to_server,established; content:"<script>"; http_uri; nocase; classtype:web-application-attack; sid:1001001; rev:1;)
+
+#Regola Suricata per rilevare l'attacco SYN flood  (attacco DoS)
+alert tcp any any -> $HOME_NET 80 (msg:"SYN Flood Detected"; flags:S; threshold: type both, track by_src, count 200, seconds 1; classtype:attempted-dos; sid:100003; rev:1;)
