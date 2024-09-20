@@ -54,3 +54,4 @@ CMD ["/start.sh"]
 
 #per aggiungere, sostituire o cambiare le regole si deve aprire il file   /etc/suricata/rules/suricata.rules     
 #ad esempio con vim (i per modalità modifica e :wq per salvare e uscire)
+

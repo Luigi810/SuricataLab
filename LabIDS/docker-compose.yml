@@ -15,10 +15,20 @@ services:
       - INTERFACES=eth0 eth1  
     ports:
       - "8000:8000"  # Esempio, se vuoi accedere ai log o statistiche via web
-#    volumes:
-#      - ./suricata/config:/etc/suricata
-#      - ./suricata/logs:/var/log/suricata
-  
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    networks:
+      internal_net:
+        ipv4_address: 10.0.0.4
+      
   webserver:
     build: ./webserver
     container_name: webserver
@@ -26,10 +36,14 @@ services:
     networks:
       web_net:
         ipv4_address: 172.18.0.3
+      internal_net:
+        ipv4_address: 10.0.0.3
     depends_on:
       - suricata
     ports:
       - "8080:80"
+    environment:
+      - INTERFACES=eth0 eth1  
     cap_add:
     - NET_ADMIN 
 
@@ -51,8 +65,14 @@ networks:
     ipam:
       config:
         - subnet: 172.18.0.0/16
+  internal_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
   attack_net:
     driver: bridge
     ipam:
       config:
         - subnet: 172.19.0.0/16
+

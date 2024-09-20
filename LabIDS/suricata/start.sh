@@ -17,3 +17,4 @@ chmod 640 /etc/suricata/rules/*.rules
 #suricata -c /etc/suricata/suricata.yaml -i eth0 -i eth1
 
 tail -f /dev/null    #per tenere il container aperto, altrimenti si chiuderebbe da  solo
+

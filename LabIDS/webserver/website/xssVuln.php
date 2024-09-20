@@ -15,14 +15,15 @@
         <input type="submit" value="Invia">
     </form>
 
-    <hr> <!-- Serve ad inserire una linea orizzontale di separazione -->
+    <hr>
 
     <h2>Commenti inseriti:</h2>
 
     <div>
-        <!-- Qui viene visualizzato il commento inserito dall'utente, qualsiasi input dell'utente, incluso codice JavaScript malevolo che verrà eseguito dal browser -->
+        <!-- Qui viene visualizzato il commento inserito dall'utente, qualsiasi input dell'utente, incluso codice JavaScript malevolo, verrà eseguito -->
         <p><?php if(isset($_GET['comment'])) echo $_GET['comment']; ?></p>
     </div>
 
 </body>
 </html>
+

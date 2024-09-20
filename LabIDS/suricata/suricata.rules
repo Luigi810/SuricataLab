@@ -21,10 +21,22 @@ alert tcp any any -> $HOME_NET any (msg:"Nmap TCP Connect scan detected"; flags:
 alert tcp any any -> $HOME_NET any (msg:"ET SCAN Nmap TCP Syn Scan"; flags:S; threshold: type both, track by_src, count 5, seconds 60; reference:url,doc.emergingthreats.net/bin/view/Main/2000011; classtype:attempted-recon; sid:2000011; rev:13;)
 
 #Rilevazione di XSS con pattern JavaScript generico
-alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"XSS Attempt Detected"; content:"<script"; http_client_body; nocase; content:"javascript:"; http_uri; nocase; pcre:"/alert\s*\(/i"; metadata:service http; reference:url,www.owasp.org/index.php/Cross-site_scripting; sid:1000001; rev:1;)
+alert http $EXTERNAL_NET any -> $HOME_NET any (msg:"XSS Attempt Detected"; content:"<script"; http_client_body; nocase; content:"javascript:"; http_uri; nocase; pcre:"/alert\s*\(/i"; metadata:service http; reference:url,www.owasp.org/index.php/Cross-site_scripting; sid:1000004; rev:1;)
 
 #Rilevazione di uno script JavaScript malevolo   (attacco XSS)
-alert http any any -> $HOME_NET any (msg:"XSS Attack Detected: Basic script tag"; flow:to_server,established; content:"<script>"; http_uri; nocase; classtype:web-application-attack; sid:1001001; rev:1;)
+alert http any any -> $HOME_NET any (msg:"XSS Attack Detected: Basic script tag"; flow:to_server,established; content:"<script>"; http_uri; nocase; classtype:web-application-attack; sid:1000005; rev:1;)
 
 #Regola Suricata per rilevare l'attacco SYN flood  (attacco DoS)
-alert tcp any any -> $HOME_NET 80 (msg:"SYN Flood Detected"; flags:S; threshold: type both, track by_src, count 200, seconds 1; classtype:attempted-dos; sid:100003; rev:1;)
+alert tcp any any -> $HOME_NET 80 (msg:"SYN Flood Detected"; flags:S; threshold: type both, track by_src, count 200, seconds 1; classtype:attempted-dos; sid:1000006; rev:1;)
+
+#Regola Suricata per rilevare un attacco di tipo SQL Injection
+alert http any any -> $HOME_NET any (msg:"Possible SQL Injection Attempt"; content:"union select"; nocase; content:"from information_schema.tables"; nocase; classtype:web-application-attack; sid:1000007; rev:1;)
+
+alert http any any -> $HOME_NET any (msg:"Possible SQL Injection Attempt"; content:"select * from"; nocase; pcre:"/select[\s]+[\*]+[\s]+from[\s]+[\w]+/i"; classtype:web-application-attack; sid:1000008; rev:1;)
+
+alert http any any -> $HOME_NET any (msg:"SQL Injection Attempt - OR 1=1"; content:"OR 1=1"; nocase; classtype:web-application-attack; sid:1000009; rev:1;)
+
+alert http any any -> $HOME_NET any (msg:"SQL Injection Attempt - OR 1=1"; content:"OR+1%3D1"; nocase; classtype:web-application-attack; sid:1000011; rev:1;)
+
+
+

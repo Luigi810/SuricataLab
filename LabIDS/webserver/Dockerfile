@@ -8,7 +8,12 @@ RUN apt-get update && apt-get install -y \
     curl \
     net-tools \
     iproute2 \
-    php
+    php \
+    php-mysqli \
+    libapache2-mod-php
+
+# per l'interazione col database
+#RUN docker-php-ext-install mysqli
 
 # Disabilita mpm_event e abilita mpm_prefork
 RUN a2dismod mpm_event && a2enmod mpm_prefork
@@ -24,4 +29,5 @@ COPY ./website/ /var/www/html/
 EXPOSE 80
 
 CMD ["/start_ws.sh"]
+
 
