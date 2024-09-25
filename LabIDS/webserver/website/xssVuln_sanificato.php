@@ -9,7 +9,7 @@
     <h1>Simulazione di un sito vulnerabile a XSS (Reflected)</h1>
 
     <p>Inserisci un commento:</p>
-    <form action="xssVuln.php" method="GET">
+    <form action="xssVuln_sanificato.php" method="GET">
         <label for="comment">Commento:</label><br>
         <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br><br>
         <input type="submit" value="Invia">
