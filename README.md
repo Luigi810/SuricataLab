@@ -1,5 +1,5 @@
 # SuricataLab
- Laboratorio basato su Docker-compose per fare pratica con alcune tipologie di attacco e sulla identificazione dei suddetti attraverso l'utilizzo di IDS Suricata-based per poter identificare gli attacchi e agire di conseguenza per salvaguardare il webserver di interesse.
+Laboratorio basato su Docker-compose per fare pratica con alcune tipologie di attacco e sulla identificazione dei suddetti attraverso l'utilizzo di IDS Suricata-based per poter identificare gli attacchi e agire di conseguenza per salvaguardare il webserver di interesse.
 
 
 ## Avvio dei containers
@@ -74,7 +74,49 @@ dove -c in particolare specifica il numero di iterazioni dopo il
 quale fermarsi, il rate è il numero di pacchetti inviati al secondo, e 
 ovviamente sono specificati IP destinazione, porta e tipo di connessione.
 
+4) Attacco SQL Injection sfruttando la vulnerabilità della pagina sqlVuln.php
+dove è presente un form da compilare per poter accedere ad un database.
+Si può eseguire l'attacco da shell con il comando curl:
 
+curl http://172.18.0.3/sqlVuln.php?user_id=1'OR+1%3D1+%23
+
+Ovviamente prima dell'esecuzione dell'attacco va innanzitutto creata 
+e riempita la tabella del database MySql:
+
+-- Per fare il login in MySQL
+mysql -u user -p   
+
+-- Per selezionare il database nel DBServer
+USE testdb;        
+
+-- Per creare una table nel DB
+CREATE TABLE utenti (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);                 
+
+-- Per inserire un valore nella tabella
+INSERT INTO utenti (nome) VALUES ('Kvaratskhelia'); 
+
+
+## Possibili Regole Suricata per la loro identificazione
+
+1) Per rilevare uno scan TCP Connect, che rispetti i vincoli temporali della seguente, può essere usata la regola:
+
+alert tcp any any -> $HOME_NET any (msg:"Nmap TCP Connect scan detected"; flags:S,A; threshold: type both, track by_src, count 20, seconds 3; classtype:attempted-recon; sid:100002; rev:1;)
+
+2) Per rilevare un attacco XSS in cui si inserisce il tag html per incorporare codice senza modifiche può essere:
+
+alert http any any -> $HOME_NET any (msg:"XSS Attack Detected: Basic script tag"; flow:to_server,established; content:"<script>"; http_uri; nocase; classtype:web-application-attack; sid:1000004; rev:1;)
+
+3) Per rilevare l'attacco SYN flood  (attacco DoS), che rispetti i vincoli temporali della seguente, può essere usata la regola:
+
+alert tcp any any -> $HOME_NET 80 (msg:"SYN Flood Detected"; flags:S; threshold: type both, track by_src, count 200, seconds 1; classtype:attempted-dos; sid:1000005; rev:1;)
+
+4) Per rilevare questo particolare Attacco SQL Injection una possibile regola per l'identificazione è 
+   
+alert http any any -> $HOME_NET any (msg:"SQL Injection Attempt - OR 1=1 URL-encoded"; content:"OR+1%3D1"; nocase; classtype:web-application-attack; sid:1000011; rev:1;)
+   
 ## Lettura dei log di Suricata
 
 Per controllare che i log siano quelli delle regole che vogliamo 
