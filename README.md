@@ -57,6 +57,7 @@ identificare e magari reagire ad una serie di tipologie di attacco quali
 1) lo scanning attraverso nmap, con i comandi 
 
 nmap -sS 172.18.0.3  
+
 nmap -sV 172.18.0.3
 
 
@@ -84,18 +85,22 @@ Ovviamente prima dell'esecuzione dell'attacco va innanzitutto creata
 e riempita la tabella del database MySql:
 
 -- Per fare il login in MySQL
+
 mysql -u user -p   
 
 -- Per selezionare il database nel DBServer
+
 USE testdb;        
 
 -- Per creare una table nel DB
+
 CREATE TABLE utenti (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL
 );                 
 
 -- Per inserire un valore nella tabella
+
 INSERT INTO utenti (nome) VALUES ('Kvaratskhelia'); 
 
 
