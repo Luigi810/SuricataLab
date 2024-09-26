@@ -14,10 +14,9 @@ vars:
 af-packet:
   - interface: eth0    # Prima interfaccia di rete
     threads: 1    # Definisce il numero di thread per l'interfaccia
-#    bpf-filter: "not tcp"
   - interface: eth1    # Seconda interfaccia di rete
     threads: 1
-#    bpf-filter: "not tcp"
+
 
 # Global stats configuration
 stats:
@@ -66,7 +65,7 @@ outputs:
 
 logging:
   default-log-level: info
-  # Puoi usare "warn" o "error" per ridurre ulteriormente i log
+  # si può usare "warn" o "error" per ridurre ulteriormente i log
 
 # Abilita il log del traffico HTTP
 #http-log:
