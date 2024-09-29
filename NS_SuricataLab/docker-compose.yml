@@ -1,0 +1,70 @@
+version: '2'
+services:
+  attacker:
+    image: 'labids_attacker:latest'
+    stdin_open: true
+    tty: true
+    networks:
+      attacker_net:
+        ipv4_address: 172.19.0.3
+    cap_add:
+      - NET_ADMIN
+  router:
+    image: 'labids_suricata:latest'
+    stdin_open: true
+    tty: true
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      web_net:
+        ipv4_address: 172.18.0.2
+      attacker_net:
+        ipv4_address: 172.19.0.2
+    environment:
+      - INTERFACES=eth0 eth1
+    ports:
+      - "8000:8000"
+  webserver:
+    image: 'labids_webserver:latest'
+    stdin_open: true
+    tty: true
+    privileged: true
+    networks:
+      web_net:
+        ipv4_address: 172.18.0.3
+      int_net:
+        ipv4_address: 10.0.0.3
+    ports:
+      - "8080:80"
+    environment:
+      - INTERFACES=eth0 eth1
+    cap_add:
+    - NET_ADMIN
+  db:
+    image: 'mysql:5.7'
+    stdin_open: true
+    tty: true
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    networks:
+      int_net:
+        ipv4_address: 10.0.0.4
+networks:
+  attacker_net:
+    ipam:
+      config:
+        - subnet: 172.19.0.1/24
+  web_net:
+    ipam:
+      config:
+        - subnet: 172.18.0.1/24
+  int_net:
+    ipam:
+      config:
+        - subnet: 10.0.0.1/24
