@@ -1,0 +1,1 @@
+Si possono trovare tutte le informazioni relative al laboratorio nella documentazione ad esso relativa presente su Github:   https://github.com/Luigi810/SuricataLab/blob/main/ProgettoNS_Guerrera(26p).pdf
