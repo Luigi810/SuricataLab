@@ -1,8 +1,5 @@
 %YAML 1.1
 ---
-# Configurazione di base per Suricata
-#HOME_NET: "[172.18.0.0/16]"
-#EXTERNAL_NET: "any"
 
 vars:
   address-groups:
@@ -12,12 +9,11 @@ vars:
 
 # Definisce l'interfaccia di rete su cui Suricata sarà in ascolto
 af-packet:
-  - interface: eth0    # Prima interfaccia di rete
-    threads: 1    # Definisce il numero di thread per l'interfaccia
-#    bpf-filter: "not tcp"
-  - interface: eth1    # Seconda interfaccia di rete
+  - interface: eth0      # Prima interfaccia di rete
+    threads: 1           # Definisce il numero di thread per l'interfaccia
+  - interface: eth1      # Seconda interfaccia di rete
     threads: 1
-#    bpf-filter: "not tcp"
+
 
 # Global stats configuration
 stats:
@@ -27,16 +23,13 @@ enabled: Yes
 # Per modalità inline (IPS), serve un setup differente
 # mode: af-packet
 
-# File di regole: qui vengono specificate le regole IDS/IPS da caricare
+# File di regole
 default-rule-path: /etc/suricata/rules
 rule-files:
   - suricata.rules     # Un singolo file di regole semplificato, se parto con emerging-*.rules l'attacker non parte
 #  - emerging-scan.rules
-#  - "*.rules"
 
-#si potrebbe cambiare file di regole durante l'esecuzione del compose ma bisognerebbe riavviare suricata manualmente, non so perché ma non funziona con sysctl
-
-# Registro eventi di allarme
+# Registro eventi alert
 outputs:
   - fast:
       enabled: yes
@@ -66,21 +59,4 @@ outputs:
 
 logging:
   default-log-level: info
-  # Puoi usare "warn" o "error" per ridurre ulteriormente i log
-
-# Abilita il log del traffico HTTP
-#http-log:
-#  enabled: yes
-#  filename: /var/log/suricata/http.log
-
-# Abilita il log dei DNS
-#dns-log:
-#  enabled: yes
-#  filename: /var/log/suricata/dns.log
-
-# Controllo del traffico ICMP (opzionale)
-#icmp:
-#  enabled: yes
-
-# Altre opzioni avanzate possono essere omesse per semplicità in questo file base
 
