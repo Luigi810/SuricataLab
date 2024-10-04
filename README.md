@@ -12,10 +12,7 @@ Per l'avvio dei container del laboratorio si esegue
 ```
 docker-compose up --build
 ```
-Dopodiché si possono lanciare le shell dei tre container usando lo script avvioShell.sh, la shell suricata è facile da identificare, per le altre 2 bisogna controllare con il comando docker ps l'id del containeruna volta che ho le shell devo abilitare il routing con i seguenti comandi nel container di attacker
-```
-ip route add 172.18.0.0/16 via 172.19.0.2
-```
+Dopodiché si possono lanciare le shell dei tre container usando lo script avvioShell.sh, la shell suricata è facile da identificare, per le altre 2 bisogna controllare con il comando docker ps l'id del container.
 In oltre serve avviare suricata, una volta soddisfatti delle regole suricata specificate in /etc/suricata/rules/suricata.rules, tramite il comando 
 ```
 suricata -c /etc/suricata/suricata.yaml -i eth0 -i eth1 
