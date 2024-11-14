@@ -70,22 +70,22 @@ curl http://172.18.0.3/sqlVuln.php?user_id=1'OR+1%3D1+%23
 Before executing the attack, create and populate the MySQL database table:
 
 ```
--- Per fare il login in MySQL
+-- To login in MySQL
 
 mysql -u user -p   
 
--- Per selezionare il database nel DBServer
+-- To select the database in the DBServer
 
 USE testdb;        
 
--- Per creare una table nel DB
+-- Create the following table in the DB
 
 CREATE TABLE utenti (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL
 );                 
 
--- Per inserire un valore nella tabella
+-- To add values in the table you can use 
 
 INSERT INTO utenti (nome) VALUES ('Kvaratskhelia'); 
 ```
